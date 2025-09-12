@@ -72,7 +72,11 @@ export const getAllAppointments = async (req, res, next) => {
             total: count,
             page: pageNumber,
             totalPages: Math.ceil(count / limitNumber),
-            data: rows.map((row) => row.get({ plain: true }))
+            data: rows.map((row) => ({
+                ...row.get({ plain: true }),
+                createdAt: row.createdAt,
+                updatedAt: row.updatedAt
+            }))
         })
     } catch (error) {
         next(error)
@@ -93,7 +97,11 @@ export const getAppointmentById = async (req, res, next) => {
             await appointment.save();
         }
 
-        res.json(appointment.get({ plain: true }));
+        res.json({
+            ...appointment.get({ plain: true }),
+            createdAt: appointment.createdAt,
+            updatedAt: appointment.updatedAt
+        });
 
     } catch (error) {
         next(error)

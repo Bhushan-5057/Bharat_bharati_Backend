@@ -75,6 +75,8 @@ export const getAllEducations = async (req, res, next) => {
             school_address: education.school_address,
             created_by: education.created_by,
             creator: education.creator,
+            createdAt: education.createdAt,
+            updatedAt: education.updatedAt,
             images: education.images.map(img => ({
                 id: img.id,
                 file_name: img.file_name,
@@ -109,6 +111,8 @@ export const getEducationById = async (req, res, next) => {
             school_address: education.school_address,
             created_by: education.created_by,
             creator: education.creator,
+            createdAt: education.createdAt,
+            updatedAt: education.updatedAt,
             images: education.images.map(img => ({
                 id: img.id,
                 is_main: img.is_main,
@@ -177,6 +181,8 @@ export const updateEducation = async (req, res, next) => {
             school_address: updated.school_address,
             created_by: updated.created_by,
             creator: updated.creator,
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
             images: updated.images.map(img => ({
                 education_id: img.id,
                 file_name: img.file_name,

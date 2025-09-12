@@ -42,6 +42,8 @@ export const getAllImages = async (req, res,next) => {
             file_name: img.file_name,
             created_by: img.created_by,
             creator: img.creator,
+            createdAt: img.createdAt,
+            updatedAt: img.updatedAt,
             data: img.data.toString("base64"),
         }));
 
@@ -68,6 +70,8 @@ export const getImageById = async (req, res, next) => {
             file_name: image.file_name,
             creator: image.creator,
             created_by: image.created_by,
+            createdAt: image.createdAt,
+            updatedAt: image.updatedAt,
             data: image.data.toString("base64"),
         });
     } catch (error) {

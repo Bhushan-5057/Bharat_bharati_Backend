@@ -48,7 +48,21 @@ export const createCity = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "City record created successfully",
-            citiyWithRelation
+            citiyWithRelation: {
+                id: citiyWithRelation.id,
+                title: citiyWithRelation.title,
+                description: citiyWithRelation.description,
+                created_by: citiyWithRelation.created_by,
+                creator: citiyWithRelation.creator,
+                created_at: citiyWithRelation.createdAt,
+                updated_at: citiyWithRelation.updatedAt,
+                images: citiyWithRelation.images.map(img => ({  
+                    id: img.id,
+                    file_name: img.file_name,
+                    is_main: img.is_main,
+                    data: img.data.toString("base64"),
+                }))
+            }
         });
     } catch (error) {
         next(error)
@@ -71,6 +85,8 @@ export const getAllCities = async (req, res, next) => {
             description: city.description,
             created_by: city.created_by,
             creator: city.creator,
+            created_at: city.createdAt,
+            updated_at: city.updatedAt,
             images: city.images.map(img => ({
                 id: img.id,
                 file_name: img.file_name,
@@ -104,6 +120,8 @@ export const getCityById = async (req, res,next) => {
             description: cities.description,
             created_by: cities.created_by,
             creator: cities.creator,
+            created_at: cities.createdAt,
+            updated_at: cities.updatedAt,
             images: cities.images.map(img => ({
                 id: img.id,
                 file_name: img.file_name,
@@ -163,10 +181,12 @@ export const updateCity = async (req, res, next) => {
             description: updated.description,
             created_by: updated.created_by,
             creator: updated.creator,
+            created_at: updated.createdAt,
+            updated_at: updated.updatedAt,
             images: updated.images.map(img => ({
                 cities_id: img.id,
                 file_name: img.file_name,
-                data: img.data.toString("base64")
+                data: img.data.toString("base64") 
             }))
         };
 

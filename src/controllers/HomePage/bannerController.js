@@ -36,10 +36,12 @@ export const getAllBanners = async (req, res, next) => {
 
         res.json(banners.map(banner => ({
             id: banner.id,
+            created_by: banner.created_by,
+            creator: banner.creator,
+            createdAt: banner.createdAt,
+            updatedAt: banner.updatedAt,
             file_name: banner.file_name,
             data: banner.data.toString("base64"),
-            created_by: banner.created_by,
-            creator: banner.creator
         })));
     } catch (error) {
         next(error)
@@ -60,10 +62,12 @@ export const getBannerById = async (req, res, next) => {
 
         res.json({
             id: banner.id,
+            created_by: banner.created_by,
+            creator: banner.creator,
+            createdAt: banner.createdAt,
+            updatedAt: banner.updatedAt,
             file_name: banner.file_name,
             data: banner.data.toString("base64"),
-            created_by: banner.created_by,
-            creator: banner.creator
         });
     } catch (error) {
         next(error)

@@ -13,6 +13,7 @@ export const addVideo = async (req, res,next) => {
 
         const videoWithCreator = await GalleryVideo.findByPk(newVideo.id, {
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
+            attributes: ["id", "description", "youtube_url", "created_by", "createdAt", "updatedAt"],
         });
 
         res.status(201).json({
@@ -29,6 +30,7 @@ export const getAllVideos = async (req, res,next) => {
     try {
         const videos = await GalleryVideo.findAll({
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
+            attributes: ["id", "description", "youtube_url", "created_by", "createdAt", "updatedAt"],
             order: [["createdAt", "DESC"]],
         });
         res.json(videos);
@@ -43,6 +45,7 @@ export const getVideoById = async (req, res,next) => {
         const { id } = req.params;
         const video = await GalleryVideo.findByPk(id, {
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
+            attributes: ["id", "description", "youtube_url", "created_by", "createdAt", "updatedAt"],
         });
 
         if (!video) {
@@ -74,6 +77,7 @@ export const updateVideo = async (req, res,next) => {
 
         const updatedVideo = await GalleryVideo.findByPk(id, {
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
+            attributes: ["id", "description", "youtube_url", "created_by", "createdAt", "updatedAt"],
         });
 
         res.json({ message: "Video updated successfully", video: updatedVideo });

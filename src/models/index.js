@@ -11,6 +11,7 @@ import Cities from "./Cities/Cities.model.js";
 import CityImages from "./Cities/CityImages.model.js";
 import GalleryVideo from "./GalleryVideo.model.js";
 import GalleryImage from "./GalleryImage.model.js";
+import DonationPage from "./DonationPage.model.js";
 
 Banner.belongsTo(User, { foreignKey: "created_by", as: "creator" });
 User.hasMany(Banner, { foreignKey: "created_by", as: "banners" });
@@ -40,7 +41,7 @@ EducationImages.belongsTo(Education, { foreignKey: "education_id" });
 Education.hasMany(EducationImages, { foreignKey: "education_id", as: "images" });
 
 CityImages.belongsTo(Cities, { foreignKey: "cities_id" });
-Cities.hasMany(CityImages, { foreignKey: "cities_id", as: "images" }); 
+Cities.hasMany(CityImages, { foreignKey: "cities_id", as: "images" });
 
 User.hasMany(GalleryImage, { foreignKey: "created_by", as: "images" });
 GalleryImage.belongsTo(User, { foreignKey: "created_by", as: "creator" });
@@ -49,4 +50,22 @@ GalleryImage.belongsTo(User, { foreignKey: "created_by", as: "creator" });
 User.hasMany(GalleryVideo, { foreignKey: "created_by", as: "videos" });
 GalleryVideo.belongsTo(User, { foreignKey: "created_by", as: "creator" });
 
-export { Banner, User, OfficeBearer, Service, Certificate, Integration, Education, EducationImages, Activities, Cities,CityImages, GalleryImage, GalleryVideo };
+DonationPage.belongsTo(User, { foreignKey: "created_by", as: "creator" });
+User.hasMany(DonationPage, { foreignKey: "created_by", as: "donation_page" });
+
+export {
+    Banner,
+    User,
+    OfficeBearer,
+    Service,
+    Certificate,
+    Integration,
+    Education,
+    EducationImages,
+    Activities,
+    Cities,
+    CityImages,
+    GalleryImage,
+    GalleryVideo,
+    DonationPage
+};

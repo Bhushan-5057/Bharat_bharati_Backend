@@ -33,7 +33,7 @@ export const getAllCertificates = async (req, res, next) => {
     try {
         const certificates = await Certificate.findAll({
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
-            attributes: ["id", "file_name", "created_by", "createdAt"],
+            attributes: ["id", "file_name", "created_by", "createdAt","updatedAt"],
         });
         return res.json(certificates)
     } catch (error) {

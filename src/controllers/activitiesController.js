@@ -46,10 +46,12 @@ export const getAllActivities = async (req, res, next) => {
             id: activity.id,
             title: activity.title,
             description: activity.description,
+            created_by: activity.created_by,
+            creator: activity.creator,
+            createdAt: activity.createdAt,
+            updatedAt: activity.updatedAt,
             file_name: activity.file_name,
             data: activity.data.toString("base64"),
-            created_by: activity.created_by,
-            creator: activity.creator
         })));
     } catch (error) {
         next(error)
@@ -74,10 +76,12 @@ export const getActivityById = async (req, res) => {
             id: activities.id,
             title: activities.title,
             description: activities.description,
+            created_by: activities.created_by,
+            creator: activities.creator,
+            createdAt: activities.createdAt,
+            updatedAt: activities.updatedAt,
             file_name: activities.file_name,
             data: activities.data.toString("base64"),
-            created_by: activities.created_by,
-            creator: activities
         });
     } catch (error) {
         next(error)
@@ -118,8 +122,10 @@ export const updateActivities = async (req, res) => {
             description: updated.description,
             created_by: updated.created_by,
             creator: updated.creator,
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
             file_name: updated.file_name,
-            data: updated.data ? updated.data.toString("base64") : null
+            data: updated.data ? updated.data.toString("base64") : null,
         };
 
         res.json({

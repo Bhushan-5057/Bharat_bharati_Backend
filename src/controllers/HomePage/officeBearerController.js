@@ -27,7 +27,24 @@ export const createOfficeBearer = async (req, res,next) => {
             ]
         });
 
-        res.status(201).json({ message: "Office bearer created successfully", officeBearerWithCreator });
+        res.status(201).json({
+            message: "Office bearer created successfully",
+            officeBearerWithCreator: {
+                id: officeBearerWithCreator.id,
+                title: officeBearerWithCreator.title,
+                designation: officeBearerWithCreator.designation,
+                quotes: officeBearerWithCreator.quotes,
+                file_name: officeBearerWithCreator.file_name,
+                twitter: officeBearerWithCreator.twitter,
+                facebook: officeBearerWithCreator.facebook,
+                gmail: officeBearerWithCreator.gmail,
+                created_by: officeBearerWithCreator.created_by,
+                creator: officeBearerWithCreator.creator,
+                createdAt: officeBearerWithCreator.createdAt,
+                updatedAt: officeBearerWithCreator.updatedAt,
+                data: officeBearerWithCreator.data ? officeBearerWithCreator.data.toString("base64") : null,
+            }
+        });
     } catch (error) {
         next(error)
     }
@@ -47,12 +64,14 @@ export const getAllOfficeBearer = async (req, res,next) => {
             designation: officeBearer.designation,
             quotes:officeBearer.quotes,
             file_name: officeBearer.file_name,
-            data: officeBearer.data?.toString("base64"),
             twitter:officeBearer.twitter,
             facebook:officeBearer.facebook,
             gmail:officeBearer.gmail,
             created_by: officeBearer.created_by,
-            creator:officeBearer.creator
+            creator: officeBearer.creator,
+            createdAt: officeBearer.createdAt,
+            updatedAt: officeBearer.updatedAt,
+            data: officeBearer.data?.toString("base64"),
         })));
     } catch (error) {
         next(error)
@@ -77,12 +96,14 @@ export const getOfficeBearerById = async (req, res,next) => {
             designation: officeBearer.designation,
             quotes: officeBearer.quotes,
             file_name: officeBearer.file_name,
-            data: officeBearer.data.toString("base64"),
             twitter: officeBearer.twitter,
             facebook: officeBearer.facebook,
             gmail: officeBearer.gmail,
             created_by: officeBearer.created_by,
-            creator: officeBearer.creator
+            creator: officeBearer.creator,
+            createdAt: officeBearer.createdAt,
+            updatedAt: officeBearer.updatedAt,
+            data: officeBearer.data.toString("base64"),
         });
     } catch (error) {
        next(error)
@@ -127,7 +148,9 @@ export const updateOfficeBearer = async (req, res,next) => {
             created_by: updated.created_by,
             creator: updated.creator,
             file_name: updated.file_name,
-            data: updated.data ? updated.data.toString("base64") : null
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
+            data: updated.data ? updated.data.toString("base64") : null,
         };
 
         res.json({ message: "Office bearer updated successfully", formattedOfficeBearer });

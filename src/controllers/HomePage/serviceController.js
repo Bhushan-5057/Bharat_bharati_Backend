@@ -41,10 +41,12 @@ export const getAllServices = async (req, res, next) => {
             id: service.id,
             title: service.title,
             description: service.description,
+            created_by: service.created_by,
+            creator: service.creator,
+            createdAt: service.createdAt,
+            updatedAt: service.updatedAt,
             file_name: service.file_name,
             data: service.data.toString("base64"),
-            created_by: service.created_by,
-            creator: service.creator
         })));
     } catch (error) {
         next(error)
@@ -67,10 +69,13 @@ export const getServiceById = async (req, res) => {
             id: service.id,
             title: service.title,
             description: service.description,
+            created_by: service.created_by,
+            creator: service.creator,
+            createdAt: service.createdAt,
+            updatedAt: service.updatedAt,
             file_name: service.file_name,
             data: service.data.toString("base64"),
-            created_by: service.created_by,
-            creator: service.creator
+
         });
     } catch (error) {
         console.error("Error fetching service:", error);
@@ -109,8 +114,10 @@ export const updateService = async (req, res, next) => {
             description: updated.description,
             created_by: updated.created_by,
             creator: updated.creator,
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
             file_name: updated.file_name,
-            data: updated.data ? updated.data.toString("base64") : null
+            data: updated.data ? updated.data.toString("base64") : null,
         };
 
         res.json({ message: "Service updated successfully", formattedService });

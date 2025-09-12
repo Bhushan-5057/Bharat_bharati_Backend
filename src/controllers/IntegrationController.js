@@ -26,7 +26,17 @@ export const createIntegration = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Integration record created successfully",
-            integrationWithRelation
+            integrationWithRelation: {
+                id: integrationWithRelation.id,
+                title: integrationWithRelation.title,
+                description: integrationWithRelation.description,
+                file_name: integrationWithRelation.file_name,
+                created_by: integrationWithRelation.created_by,
+                creator: integrationWithRelation.creator,
+                createdAt: integrationWithRelation.createdAt,
+                updatedAt: integrationWithRelation.updatedAt,
+                data: integrationWithRelation.data ? integrationWithRelation.data.toString("base64") : null,
+            }
         });
     } catch (error) {
         next(error)
@@ -47,9 +57,11 @@ export const getAllIntegrations = async (req, res, next) => {
             title: integration.title,
             description: integration.description,
             file_name: integration.file_name,
-            data: integration.data.toString("base64"),
             created_by: integration.created_by,
-            creator: integration.creator
+            creator: integration.creator,
+            createdAt: integration.createdAt,
+            updatedAt: integration.updatedAt,
+            data: integration.data ? integration.data.toString("base64") : null,
         })));
     } catch (error) {
         next(error)
@@ -75,9 +87,11 @@ export const getIntegrationById = async (req, res) => {
             title: integration.title,
             description: integration.description,
             file_name: integration.file_name,
-            data: integration.data.toString("base64"),
             created_by: integration.created_by,
-            creator: integration.creator
+            creator: integration.creator,
+            createdAt: integration.createdAt,
+            updatedAt: integration.updatedAt,
+            data: integration.data.toString("base64"),
         });
     } catch (error) {
         next(error)
@@ -118,7 +132,9 @@ export const updateIntegration = async (req, res) => {
             created_by: updated.created_by,
             creator: updated.creator,
             file_name: updated.file_name,
-            data: updated.data ? updated.data.toString("base64") : null
+            createdAt: updated.createdAt,
+            updatedAt: updated.updatedAt,
+            data: updated.data ? updated.data.toString("base64") : null,
         };
 
         res.json({
