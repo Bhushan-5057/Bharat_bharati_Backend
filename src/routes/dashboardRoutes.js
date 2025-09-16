@@ -1,7 +1,7 @@
-import { getDashboardData } from "../controllers/dashBoardController.js";
+import { getDashboardData } from "../controllers/dashboardController.js";
 import { authenticateToken } from '../middleware/authorization.js'
 import express from "express";
-const router = express.Router(); 
+const router = express.Router();
 
 router.get("/get", authenticateToken, getDashboardData);
 

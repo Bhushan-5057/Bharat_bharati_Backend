@@ -4,6 +4,11 @@ import { Certificate, User } from "../models/index.js";
 export const addCertificate = async (req, res, next) => {
     try {
 
+        const existingCertificate = await Certificate.findOne({ where: { file_name: req.file.originalname } });
+        if (existingCertificate) {
+            return res.status(409).json({ success: false, message: "Certificate with this file name already exists" });
+        }
+
         if (!req.file) {
             return res.status(400).json({ error: "file is required" });
         }
@@ -33,7 +38,7 @@ export const getAllCertificates = async (req, res, next) => {
     try {
         const certificates = await Certificate.findAll({
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
-            attributes: ["id", "file_name", "created_by", "createdAt","updatedAt"],
+            attributes: ["id", "file_name", "created_by", "createdAt", "updatedAt"],
         });
         return res.json(certificates)
     } catch (error) {
@@ -107,5 +112,5 @@ export const deleteCertificate = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}; 
+};
 

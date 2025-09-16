@@ -5,7 +5,14 @@ import { Education, EducationImages, User } from '../models/index.js'
 export const createEducation = async (req, res, next) => {
     try {
         const { type, title, description, school_address } = req.body;
-        const files = req.files ? req.files : [];
+        const files = req.files ? req.files : []; 
+
+        if (!files || files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "At least one image is required"
+            });
+        }
 
         let isMainImage = req.body.is_main || [];
         if (!Array.isArray(isMainImage)) {

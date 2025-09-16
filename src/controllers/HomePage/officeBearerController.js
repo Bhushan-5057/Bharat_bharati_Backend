@@ -3,8 +3,12 @@ import {OfficeBearer,User} from "../../models/index.js";
 // Create Office Bearer
 export const createOfficeBearer = async (req, res,next) => {
     try {
-        const { title, designation,quotes,twitter,facebook,gmail } = req.body;
-        console.log(req.file);
+        const { title, designation, quotes, twitter, facebook, gmail } = req.body;
+        
+        const existingOfficeBearer = await OfficeBearer.findOne({ where: { title } });
+        if (existingOfficeBearer) {
+            return res.status(409).json({ message: "Office bearer with this title already exists" });
+        }
         if (!req.file) {
             return res.status(400).json({ message: "Image file is required" });
         }

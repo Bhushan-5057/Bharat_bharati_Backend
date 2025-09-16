@@ -4,6 +4,10 @@ import { Activities, User } from "../models/index.js";
 export const createActivities = async (req, res, next) => {
     try {
         const { title, description } = req.body;
+        const existingActivities = await Activities.findOne({ where: { title } });
+        if (existingActivities) {
+            return res.status(409).json({ success: false, message: "Activities with this title already exists" });
+        }
 
         if (!req.file) {
             return res.status(400).json({ success: false, message: "Image File is required" });
@@ -114,7 +118,7 @@ export const updateActivities = async (req, res) => {
             include: [
                 { model: User, as: "creator", attributes: ["id", "name"] }
             ]
-        }) 
+        })
 
         const formattedActivity = {
             id: updated.id,

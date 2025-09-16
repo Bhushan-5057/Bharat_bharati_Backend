@@ -1,8 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const options = {
     definition: {
@@ -30,9 +27,9 @@ const options = {
         security: [{ bearerAuth: [] }],
     },
     apis: [
-        path.join(__dirname, '../swagger_docs/**/*.js'),
-        path.join(__dirname, '../routes/**/*.js'),
-        path.join(__dirname, '../routes/*.js')
+        'src/swagger_docs/*.js', 
+        'src/routes/*.js',
+        'src/routes/**/*.js'
     ]
 };
 

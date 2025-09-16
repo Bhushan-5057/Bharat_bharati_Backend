@@ -9,6 +9,13 @@ export const createService = async (req, res, next) => {
             return res.status(400).json({ message: "Image file is required" });
         }
 
+        const existingService = await Service.findOne({
+            where: { title, description }
+        });
+        if (existingService) {
+            return res.status(409).json({ message: "Service with this title and description already exists" });
+        }
+
         const service = await Service.create({
             title,
             description,

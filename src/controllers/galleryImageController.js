@@ -3,6 +3,10 @@ import { User, GalleryImage } from '../models/index.js'
 // Add one or many images
 export const addImage = async (req, res, next) => {
     try {
+        const existingImage = await GalleryImage.findOne({ where: { file_name: req.files[0].originalname } });
+        if (existingImage) {
+            return res.status(409).json({ success: false, message: "Image with this file name already exists" });
+        }
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ message: "No files uploaded" });
         }

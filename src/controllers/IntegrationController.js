@@ -5,6 +5,11 @@ export const createIntegration = async (req, res, next) => {
     try {
         const { title, description } = req.body;
 
+        const existingIntegration = await Integration.findOne({ where: { title } });
+        if (existingIntegration) {
+            return res.status(409).json({ success: false, message: "Integration with this title already exists" });
+        }
+
         if (!req.file) {
             return res.status(400).json({ success: false, message: "File is required" });
         }

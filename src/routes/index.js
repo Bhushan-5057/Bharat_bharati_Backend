@@ -13,6 +13,7 @@ import galleryImageRouter from '../routes/galleryImageRoutes.js'
 import galleryVideoRouter from '../routes/galleryVideoRoutes.js'
 import donationPageRouter from '../routes/donationPageRoutes.js'
 import dashboardRouter from './dashboardRoutes.js'
+import blogRouter from './blogsRoutes.js'
 
 let router = express.Router()
 
@@ -35,5 +36,6 @@ router.use('/gallery_image', galleryImageRouter);
 router.use('/gallery_video', galleryVideoRouter);
 router.use('/donation_page', donationPageRouter);
 router.use('/dashboard', dashboardRouter);
+router.use('/blogs', blogRouter);
 
 export default router

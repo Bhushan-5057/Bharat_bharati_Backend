@@ -3,7 +3,12 @@ import { User,GalleryVideo } from "../models/index.js";
 // Add a new video
 export const addVideo = async (req, res,next) => {
     try {
-        const {  description, youtube_url } = req.body;
+        const { description, youtube_url } = req.body;
+        
+        const existingVideo = await GalleryVideo.findOne({ where: { youtube_url } });
+        if (existingVideo) {
+            return res.status(409).json({ success: false, message: "Video with this YouTube URL already exists" });
+        }
 
         const newVideo = await GalleryVideo.create({
             description,

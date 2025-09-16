@@ -1,5 +1,7 @@
 import Appointment from "../../models/HomePage/Appointment.model.js";
 import { Op } from "sequelize";
+import { sendEmail } from "../../utils/sendEmail.js";
+import { appointmentConfirmationTemplate, newAppointmentNotificationTemplate } from "../../utils/emailTemplates.js";
 
 // Create Appointment
 export const createAppointment = async (req, res, next) => {
@@ -12,19 +14,37 @@ export const createAppointment = async (req, res, next) => {
 
         if (existingAppointment) {
             return res.status(400).json({
-                message: `You already have an appointment on ${date} at ${time}`
+                message: `You already have an appointment on ${date} at ${time} with ${name}.`
             });
         }
 
         const appointment = await Appointment.create({
             name, email, contact_number, date, time, reason_of_meeting, your_expectation, more_details
-        })
+        });
+
+        await sendEmail(
+            email,
+            "Appointment Confirmation",
+            `Dear ${name},\n\nYour appointment is scheduled on ${date} at ${time}.`,
+            appointmentConfirmationTemplate(name, date, time, reason_of_meeting)
+        );
+
+        await sendEmail(
+            process.env.TRUST_EMAIL,
+            "New Appointment Received",
+            `New appointment created for ${name} on ${date} at ${time}.`,
+            newAppointmentNotificationTemplate({
+                name, email, contact_number, date, time,
+                reason_of_meeting, your_expectation, more_details
+            })
+        );
 
         res.status(201).json({ message: "Appointment created successfully", appointment });
     } catch (error) {
         next(error)
     }
 };
+
 
 // Get all Appointments
 export const getAllAppointments = async (req, res, next) => {

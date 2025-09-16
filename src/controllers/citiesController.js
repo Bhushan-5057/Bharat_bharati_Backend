@@ -3,7 +3,7 @@ import { Cities, User, CityImages } from "../models/index.js";
 // Create  Cities
 export const createCity = async (req, res, next) => {
     try {
-        const { title, description } = req.body;
+        const { title, description } = req.body; 
         const files = req.files ? req.files : [];  
 
         let isMainImage = req.body.is_main || [];

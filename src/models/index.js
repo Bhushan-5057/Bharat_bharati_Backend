@@ -12,6 +12,7 @@ import CityImages from "./Cities/CityImages.model.js";
 import GalleryVideo from "./GalleryVideo.model.js";
 import GalleryImage from "./GalleryImage.model.js";
 import DonationPage from "./DonationPage.model.js";
+import Blog from "./Blogs.model.js";
 
 Banner.belongsTo(User, { foreignKey: "created_by", as: "creator" });
 User.hasMany(Banner, { foreignKey: "created_by", as: "banners" });
@@ -51,7 +52,10 @@ User.hasMany(GalleryVideo, { foreignKey: "created_by", as: "videos" });
 GalleryVideo.belongsTo(User, { foreignKey: "created_by", as: "creator" });
 
 DonationPage.belongsTo(User, { foreignKey: "created_by", as: "creator" });
-User.hasMany(DonationPage, { foreignKey: "created_by", as: "donation_page" });
+User.hasMany(DonationPage, { foreignKey: "created_by", as: "donation_page" }); 
+
+Blog.belongsTo(User, { foreignKey: "created_by", as: "creator" });
+User.hasMany(Blog, { foreignKey: "created_by", as: "blogs" });
 
 export {
     Banner,
@@ -67,5 +71,6 @@ export {
     CityImages,
     GalleryImage,
     GalleryVideo,
-    DonationPage
+    DonationPage,
+    Blog
 };

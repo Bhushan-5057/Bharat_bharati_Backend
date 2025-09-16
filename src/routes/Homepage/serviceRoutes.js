@@ -7,7 +7,7 @@ import { validateRequest } from '../../middleware/validateRequest.js'
 
 const router = express.Router();
 
-router.post("/create", authenticateToken, upload.single("file_name"), createServiceValidation, validateRequest, createService);
+router.post("/create", authenticateToken, upload.single("file_name"), createServiceValidation, validateRequest,createService);
 router.get("/get-all", getAllServices);
 router.get("/get/:id", getServiceById);
 router.put("/update/:id", authenticateToken, upload.single("file_name"), updateServiceValidation, validateRequest, updateService);

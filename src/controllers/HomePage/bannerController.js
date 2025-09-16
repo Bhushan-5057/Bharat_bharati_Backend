@@ -3,6 +3,11 @@ import { Banner, User } from "../../models/index.js"
 // Create a new banner
 export const createBanner = async (req, res, next) => {
     try {
+
+        const existingBanner = await Banner.findOne({ where: { file_name: req.file.originalname } });
+        if (existingBanner) {
+            return res.status(409).json({ message: "Banner with this file name already exists" });
+        }
         if (!req.file) {
             return res.status(400).json({ message: "Image file is required" });
         }
