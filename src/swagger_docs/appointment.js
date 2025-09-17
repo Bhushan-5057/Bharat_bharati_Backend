@@ -57,6 +57,13 @@
  *   get:
  *     summary: Get all appointments
  *     tags: [Appointment]
+ *     parameters:
+ *       - in: query
+ *         name: view
+ *         schema:
+ *           type: boolean
+ *         required: false
+ *         description: If true, returns appointments in view mode; if false, returns raw data
  *     responses:
  *       200:
  *         description: List of all appointments
@@ -80,65 +87,3 @@
  *       404:
  *         description: Appointment not found
  */
-
-/**
- * @swagger
- * /appointment/update/{id}:
- *   put:
- *     summary: Update appointment details
- *     tags: [Appointment]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               contact_number:
- *                 type: string
- *               date:
- *                 type: string
- *                 format: date
- *               time:
- *                 type: string
- *                 format: time
- *               reason_of_meeting:
- *                 type: string
- *               your_expectation:
- *                 type: string
- *               more_details:
- *                 type: string
- *               view:
- *                 type: boolean
- *     responses:
- *       200:
- *         description: Appointment updated successfully
- *       404:
- *         description: Appointment not found
- */
-
-/**
- * @swagger
- * /appointment/delete/{id}:
- *   delete:
- *     summary: Delete appointment by ID
- *     tags: [Appointment]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Appointment deleted successfully */
