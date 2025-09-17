@@ -7,6 +7,7 @@ import { createDonationPageValidation, updateDonationPageValidation } from "../v
 
 const router = express.Router();
 
+//Donation Page Routes
 router.post("/create", authenticateToken, upload.single("file_name"),createDonationPageValidation,validateRequest, createDonationPage);
 router.get("/get-all", getAllDonationPages);
 router.get("/get/:id", getDonationPage);

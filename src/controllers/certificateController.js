@@ -113,4 +113,3 @@ export const deleteCertificate = async (req, res, next) => {
         next(error)
     }
 };
-

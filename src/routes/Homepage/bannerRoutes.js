@@ -5,6 +5,7 @@ import { authenticateToken } from "../../middleware/authorization.js";
 
 const router = express.Router();
 
+//Banner routes
 router.post("/create", authenticateToken, upload.single("image"), createBanner);
 router.get("/get-all", getAllBanners);
 router.get("/get/:id", getBannerById);

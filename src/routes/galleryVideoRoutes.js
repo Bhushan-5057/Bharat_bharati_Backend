@@ -5,6 +5,7 @@ import {authenticateToken} from '../middleware/authorization.js'
 
 const router = express.Router();
 
+//Gallery Video Routes
 router.post("/add", validateVideoBody,authenticateToken, addVideo);
 router.get("/get-all", getAllVideos);
 router.get("/get/:id", getVideoById);

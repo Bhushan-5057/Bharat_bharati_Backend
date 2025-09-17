@@ -6,6 +6,7 @@ import { validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
+// Certificate Routes
 router.post("/add", authenticateToken, upload.single("pdf"), validateRequest, addCertificate);
 router.get("/get/:id", getCertificateById);
 router.get("/get-all", getAllCertificates);

@@ -1,4 +1,3 @@
-
 import { Education, EducationImages, User } from '../models/index.js'
 
 // Create Education

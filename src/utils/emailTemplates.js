@@ -1,3 +1,4 @@
+//HTML email template for appointment confirmation
 export const appointmentConfirmationTemplate = (name, date, time, reason) => `
 <!DOCTYPE html>
 <html>
@@ -57,6 +58,7 @@ export const appointmentConfirmationTemplate = (name, date, time, reason) => `
 </html>
 `;
 
+//HTML email template for notifying admin about new appointment
 export const newAppointmentNotificationTemplate = (data) => `
 <!DOCTYPE html>
 <html>

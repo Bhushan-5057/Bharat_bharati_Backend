@@ -6,6 +6,7 @@ import {GalleryImageValidation,updateGalleryImageValidation} from "../validation
 
 const router = express.Router();
 
+//Gallery Image Routes
 router.post("/add", authenticateToken, upload.array("file_name"),GalleryImageValidation, addImage);
 router.get("/get-all", getAllImages);
 router.get("/get/:id", getImageById);

@@ -7,6 +7,7 @@ import { validateRequest } from '../../middleware/validateRequest.js'
 
 const router = express.Router();
 
+//Office Bearer Routes
 router.post("/create", authenticateToken, upload.single("file_name"), createOfficeBearerValidation, validateRequest,  createOfficeBearer);
 router.get("/get-all", getAllOfficeBearer);
 router.get("/get/:id", getOfficeBearerById);

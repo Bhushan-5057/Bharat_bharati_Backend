@@ -7,6 +7,7 @@ import { validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
+//Blog Routes
 router.post("/create", authenticateToken, upload.single("file_name"), createBlogValidation, validateRequest, createBlog);
 router.get("/get-all", getAllBlogs);
 router.get("/get/:slug", getBlogBySlug);

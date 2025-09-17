@@ -7,6 +7,7 @@ import { validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
+//Activities Routes
 router.post("/create", authenticateToken, upload.single("file_name"), createActivitiesValidation, validateRequest, createActivities);
 router.get("/get-all", getAllActivities);
 router.get("/get/:id", getActivityById);

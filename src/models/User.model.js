@@ -31,7 +31,7 @@ const User = sequelize.define('User', {
     },
 },
     {
-        timestamps: true, // Adds createdAt and updatedAt
+        timestamps: true, 
         tableName: 'users',
         indexes: [
             {
@@ -52,6 +52,5 @@ User.prototype.toJSON = function () {
 User.findByEmail = function (email) {
     return this.findOne({ where: { email } });
 };
-
 
 export default User;

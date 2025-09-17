@@ -45,7 +45,6 @@ export const createAppointment = async (req, res, next) => {
     }
 };
 
-
 // Get all Appointments
 export const getAllAppointments = async (req, res, next) => {
     try {
@@ -122,53 +121,6 @@ export const getAppointmentById = async (req, res, next) => {
             createdAt: appointment.createdAt,
             updatedAt: appointment.updatedAt
         });
-
-    } catch (error) {
-        next(error)
-    }
-};
-
-// Update Appointment
-export const updateAppointment = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-
-        const appointment = await Appointment.findByPk(id);
-
-        if (!appointment) return res.status(404).json({ message: "Appointment not found" });
-
-        const { name, email, contact_number, date, time, reason_of_meeting, your_expectation, more_details } = req.body;
-
-        await appointment.update({
-            name: name ?? appointment.name,
-            email: email ?? appointment.email,
-            contact_number: contact_number ?? appointment.contact_number,
-            date: date ?? appointment.date,
-            time: time ?? appointment.time,
-            reason_of_meeting: reason_of_meeting ?? appointment.reason_of_meeting,
-            your_expectation: your_expectation ?? appointment.your_expectation,
-            more_details: more_details ?? appointment.more_details
-        });
-
-        res.json({ message: "Appointment updated successfully", appointment });
-
-    } catch (error) {
-        next(error)
-    }
-};
-
-// Delete Appointment
-export const deleteAppointment = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-
-        const appointment = await Appointment.findByPk(id);
-
-        if (!appointment) return res.status(404).json({ message: "Appointment not found" });
-
-        await appointment.destroy();
-
-        res.json({ message: "Appointment deleted successfully" });
 
     } catch (error) {
         next(error)

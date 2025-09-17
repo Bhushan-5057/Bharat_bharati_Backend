@@ -7,6 +7,7 @@ import { validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
+//Integration Routes
 router.post("/create", authenticateToken, upload.single("file_name"), createIntegrationValidation, validateRequest, createIntegration);
 router.get("/get-all", getAllIntegrations);
 router.get("/get/:id", getIntegrationById);

@@ -19,5 +19,4 @@ const GalleryVideo = sequelize.define("GalleryVideo", {
     timestamps: true,
 });
 
-
 export default GalleryVideo;

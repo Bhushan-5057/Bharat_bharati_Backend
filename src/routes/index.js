@@ -22,6 +22,7 @@ router.use((req, res, next) => {
     next()
 })
 
+// Mounting all the routers
 router.use('/user', userRouter);
 router.use('/banner', bannerRouter);
 router.use('/service', serviceRouter);
