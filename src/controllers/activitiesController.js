@@ -102,6 +102,13 @@ export const updateActivities = async (req, res) => {
         const activities = await Activities.findByPk(id);
         if (!activities) {
             return res.status(404).json({ message: "Activities not found" });
+        } 
+
+        if(title & description){
+            const existingActivities = await Activities.findOne({ where: { title, description } });
+            if (existingActivities) {
+                return res.status(409).json({ success: false, message: "Activities with this title & description already exists" });
+            }
         }
 
         if (req.file) {

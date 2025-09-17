@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /office-bearer/create:
+ * /office_bearer/create:
  *   post:
  *     summary: Create a new office bearer
  *     tags: [OfficeBearer]
@@ -23,8 +23,6 @@
  *               - title
  *               - designation
  *               - file_name
- *               - data
- *               - created_by
  *             properties:
  *               title:
  *                 type: string
@@ -34,20 +32,25 @@
  *                 description: Designation/role of the office bearer
  *               quotes:
  *                 type: string
- *                 description: Inspirational quote
+ *                 description: Inspirational quote (optional)
  *               file_name:
  *                 type: string
  *                 format: binary
- *                 description: Profile image file
  *               twitter:
  *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 description: Twitter profile URL (optional)
  *               facebook:
  *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 description: Facebook profile URL (optional)
  *               gmail:
  *                 type: string
- *               created_by:
- *                 type: integer
- *                 description: ID of the user creating the record
+ *                 format: email
+ *                 nullable: true
+ *                 description: Gmail address (optional)
  *     responses:
  *       201:
  *         description: Office bearer created successfully
@@ -57,7 +60,7 @@
 
 /**
  * @swagger
- * /office-bearer/get-all:
+ * /office_bearer/get-all:
  *   get:
  *     summary: Get all office bearers
  *     tags: [OfficeBearer]
@@ -68,7 +71,7 @@
 
 /**
  * @swagger
- * /office-bearer/get/{id}:
+ * /office_bearer/get/{id}:
  *   get:
  *     summary: Get an office bearer by ID
  *     tags: [OfficeBearer]
@@ -87,7 +90,7 @@
 
 /**
  * @swagger
- * /office-bearer/update/{id}:
+ * /office_bearer/update/{id}:
  *   put:
  *     summary: Update an office bearer
  *     tags: [OfficeBearer]
@@ -117,12 +120,19 @@
  *                 format: binary
  *               twitter:
  *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 description: Twitter profile URL (optional)
  *               facebook:
  *                 type: string
+ *                 format: uri
+ *                 nullable: true
+ *                 description: Facebook profile URL (optional)
  *               gmail:
  *                 type: string
- *               created_by:
- *                 type: integer
+ *                 format: email
+ *                 nullable: true
+ *                 description: Gmail address (optional)
  *     responses:
  *       200:
  *         description: Office bearer updated successfully
@@ -132,7 +142,7 @@
 
 /**
  * @swagger
- * /office-bearer/delete/{id}:
+ * /office_bearer/delete/{id}:
  *   delete:
  *     summary: Delete an office bearer
  *     tags: [OfficeBearer]

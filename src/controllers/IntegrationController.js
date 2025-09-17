@@ -5,9 +5,9 @@ export const createIntegration = async (req, res, next) => {
     try {
         const { title, description } = req.body;
 
-        const existingIntegration = await Integration.findOne({ where: { title } });
+        const existingIntegration = await Integration.findOne({ where: { title,description } });
         if (existingIntegration) {
-            return res.status(409).json({ success: false, message: "Integration with this title already exists" });
+            return res.status(409).json({ success: false, message: "Integration with this title & description already exists" });
         }
 
         if (!req.file) {
@@ -112,6 +112,22 @@ export const updateIntegration = async (req, res) => {
         const integration = await Integration.findByPk(id);
         if (!integration) {
             return res.status(404).json({ message: "Integration not found" });
+        } 
+
+        if (title && description) {
+            const existingIntegration = await Integration.findOne({
+                where: {
+                    title,
+                    description
+                },
+            });
+
+            if (existingIntegration && existingIntegration.id !== parseInt(id, 10)) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Integration with this title and description already exists",
+                });
+            }
         }
 
         if (req.file) {

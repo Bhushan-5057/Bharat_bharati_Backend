@@ -21,20 +21,17 @@
  *               - title
  *               - description
  *               - file_name
- *               - data
- *               - created_by
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Title of the integration
  *               description:
  *                 type: string
+ *                 description: Description of the integration
  *               file_name:
  *                 type: string
- *               data:
- *                 type: string
  *                 format: binary
- *               created_by:
- *                 type: integer
+ *                 description: Image file for the integration
  *     responses:
  *       201:
  *         description: Integration created successfully
@@ -85,7 +82,7 @@
  *         schema:
  *           type: integer
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
  *         multipart/form-data:
  *           schema:
@@ -93,15 +90,14 @@
  *             properties:
  *               title:
  *                 type: string
+ *                 description: Updated title (optional)
  *               description:
  *                 type: string
+ *                 description: Updated description (optional)
  *               file_name:
  *                 type: string
- *               data:
- *                 type: string
  *                 format: binary
- *               created_by:
- *                 type: integer
+ *                 description: Updated image file (optional)
  *     responses:
  *       200:
  *         description: Integration updated successfully
@@ -124,4 +120,6 @@
  *     responses:
  *       200:
  *         description: Integration deleted successfully
+ *       404:
+ *         description: Integration not found
  */

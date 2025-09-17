@@ -1,4 +1,5 @@
 import { Banner, User } from "../../models/index.js"
+import { Op } from "sequelize"; 
 
 // Create a new banner
 export const createBanner = async (req, res, next) => {
@@ -83,11 +84,34 @@ export const getBannerById = async (req, res, next) => {
 export const updateBanner = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const parsedId = parseInt(id, 10);
 
         const banner = await Banner.findByPk(id);
         if (!banner) return res.status(404).json({ message: "Banner not found" });
 
+        if (req.body.file_name) {
+            const existingBanner = await Banner.findOne({
+                where: {
+                    file_name: req.body.file_name,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingBanner) {
+                return res.status(409).json({ message: "Another banner with this file name already exists" });
+            }
+            banner.file_name = req.body.file_name;
+        }
         if (req.file) {
+            const existingBanner = await Banner.findOne({
+                where: {
+                    file_name: req.file.originalname,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingBanner) {
+                return res.status(409).json({ message: "Another banner with this file name already exists" });
+            }
+
             banner.file_name = req.file.originalname;
             banner.data = req.file.buffer;
         }

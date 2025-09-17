@@ -18,11 +18,8 @@
  *           schema:
  *             type: object
  *             required:
- *               - file_name
  *               - pdf
  *             properties:
- *               file_name:
- *                 type: string
  *               pdf:
  *                 type: string
  *                 format: binary
@@ -82,8 +79,6 @@
  *           schema:
  *             type: object
  *             properties:
- *               file_name:
- *                 type: string
  *               pdf:
  *                 type: string
  *                 format: binary
