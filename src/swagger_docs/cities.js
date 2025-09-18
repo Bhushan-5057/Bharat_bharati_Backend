@@ -20,21 +20,18 @@
  *             required:
  *               - title
  *               - description
- *               - files
  *             properties:
  *               title:
  *                 type: string
- *                 example: "New Delhi"
  *               description:
  *                 type: string
- *                 example: "Capital city of India"
  *               is_main:
  *                 type: array
  *                 items:
  *                   type: string
  *                   enum: ["true", "false"]
- *                 description: Flags for marking main images (parallel to uploaded files)
- *               files:
+ *                 description: Flags for marking main image (parallel to uploaded files)
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -89,7 +86,7 @@
  *         schema:
  *           type: integer
  *     requestBody:
- *       required: false
+ *       required: true
  *       content:
  *         multipart/form-data:
  *           schema:
@@ -99,7 +96,7 @@
  *                 type: string
  *               description:
  *                 type: string
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -132,7 +129,7 @@
 
 /**
  * @swagger
- * /cities/image/update/{id}:
+ * /cities/images/update/{id}:
  *   put:
  *     summary: Update a single city image by ID
  *     tags: [Cities]
@@ -152,8 +149,8 @@
  *               is_main:
  *                 type: string
  *                 enum: ["true", "false"]
- *                 description: Mark this image as the main image
- *               files:
+ *                 description: Mark image as main
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -167,7 +164,7 @@
 
 /**
  * @swagger
- * /cities/image/delete/{id}:
+ * /cities/images/delete/{id}:
  *   delete:
  *     summary: Delete a single city image by ID
  *     tags: [Cities]

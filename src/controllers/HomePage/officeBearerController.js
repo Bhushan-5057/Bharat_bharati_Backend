@@ -165,8 +165,8 @@ export const updateOfficeBearer = async (req, res, next) => {
             }
         }
 
-        if (designation) officeBearer.designation = designation;
-        if (quotes) officeBearer.quotes = quotes;
+        if (updates.designation) officeBearer.designation = updates.designation;
+        if (updates.quotes) officeBearer.quotes = updates.quotes;
 
         await officeBearer.save();
 

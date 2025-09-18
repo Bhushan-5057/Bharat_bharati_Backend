@@ -1,4 +1,5 @@
 import { Service, User } from "../../models/index.js";
+import { Op } from "sequelize";
 
 // Create Service
 export const createService = async (req, res, next) => {
@@ -99,21 +100,49 @@ export const updateService = async (req, res, next) => {
         const service = await Service.findByPk(id);
         if (!service) return res.status(404).json({ message: "Service not found" });
 
+        const updates = { title, description };
+        const uniqueFields = ["title", "description"];
+
+        for (const field of uniqueFields) {
+            if (updates[field]) {
+                const existing = await Service.findOne({
+                    where: {
+                        [field]: updates[field],
+                        id: { [Op.ne]: id }
+                    }
+                });
+                if (existing) {
+                    return res
+                        .status(409)
+                        .json({ message: `Another service with this ${field} already exists.` });
+                }
+                service[field] = updates[field];
+            }
+        }
+
         if (req.file) {
+            const duplicateFile = await Service.findOne({
+                where: {
+                    id: { [Op.ne]: id },
+                    file_name: req.file.originalname
+                }
+            });
+
+            if (duplicateFile) {
+                return res.status(409).json({
+                    message: "Another service with this file already exists. Please upload a different file."
+                });
+            }
+
             service.file_name = req.file.originalname;
             service.data = req.file.buffer;
         }
 
-        if (title) service.title = title;
-        if (description) service.description = description;
-
         await service.save();
 
         const updated = await Service.findByPk(service.id, {
-            include: [{
-                model: User, as: 'creator', attributes: ["id", "name"]
-            }]
-        })
+            include: [{ model: User, as: "creator", attributes: ["id", "name"] }]
+        });
 
         const formattedService = {
             id: updated.id,
@@ -129,7 +158,7 @@ export const updateService = async (req, res, next) => {
 
         res.json({ message: "Service updated successfully", formattedService });
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 

@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /gallery-videos/add:
+ * /gallery_video/add:
  *   post:
  *     summary: Add a new video to the gallery
  *     tags: [Gallery Videos]
@@ -22,10 +22,8 @@
  *             properties:
  *               description:
  *                 type: string
- *                 example: "Charity event highlights"
  *               youtube_url:
  *                 type: string
- *                 example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
  *     responses:
  *       201:
  *         description: Video added successfully
@@ -35,7 +33,7 @@
 
 /**
  * @swagger
- * /gallery-videos/get-all:
+ * /gallery_video/get-all:
  *   get:
  *     summary: Get all videos from the gallery
  *     tags: [Gallery Videos]
@@ -46,7 +44,7 @@
 
 /**
  * @swagger
- * /gallery-videos/get/{id}:
+ * /gallery_video/get/{id}:
  *   get:
  *     summary: Get a video by ID
  *     tags: [Gallery Videos]
@@ -65,7 +63,7 @@
 
 /**
  * @swagger
- * /gallery-videos/update/{id}:
+ * /gallery_video/update/{id}:
  *   put:
  *     summary: Update a video in the gallery
  *     tags: [Gallery Videos]
@@ -84,10 +82,8 @@
  *             properties:
  *               description:
  *                 type: string
- *                 example: "Updated video description"
  *               youtube_url:
  *                 type: string
- *                 example: "https://www.youtube.com/watch?v=abcd1234xyz"
  *     responses:
  *       200:
  *         description: Video updated successfully
@@ -97,7 +93,7 @@
 
 /**
  * @swagger
- * /gallery-videos/delete/{id}:
+ * /gallery_video/delete/{id}:
  *   delete:
  *     summary: Delete a video from the gallery
  *     tags: [Gallery Videos]

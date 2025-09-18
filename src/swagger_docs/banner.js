@@ -21,15 +21,11 @@
  *             type: object
  *             required:
  *               - image
- *               - created_by
  *             properties:
  *               image:
  *                 type: string
  *                 format: binary
  *                 description: Banner image file
- *               created_by:
- *                 type: integer
- *                 description: ID of the user who created the banner
  *     responses:
  *       201:
  *         description: Banner created successfully

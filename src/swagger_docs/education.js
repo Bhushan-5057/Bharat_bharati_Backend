@@ -38,7 +38,7 @@
  *                   type: string
  *                   enum: ["true", "false"]
  *                 description: Flags for marking main image (parallel to uploaded files)
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -115,7 +115,7 @@
  *                 type: string
  *               school_address:
  *                 type: string
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -148,7 +148,7 @@
 
 /**
  * @swagger
- * /education/image/update/{id}:
+ * /education/images/update/{id}:
  *   put:
  *     summary: Update a single education image by ID
  *     tags: [Education]
@@ -169,7 +169,7 @@
  *                 type: string
  *                 enum: ["true", "false"]
  *                 description: Mark image as main
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -183,7 +183,7 @@
 
 /**
  * @swagger
- * /education/image/delete/{id}:
+ * /education/images/delete/{id}:
  *   delete:
  *     summary: Delete a single education image by ID
  *     tags: [Education]

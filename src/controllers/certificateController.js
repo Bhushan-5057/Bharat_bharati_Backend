@@ -1,20 +1,21 @@
 import { Certificate, User } from "../models/index.js";
+import { Op } from "sequelize";
 
 //Add Certificate
 export const addCertificate = async (req, res, next) => {
     try {
-
-        const existingCertificate = await Certificate.findOne({ where: { file_name: req.file.originalname } });
-        if (existingCertificate) {
-            return res.status(409).json({ success: false, message: "Certificate with this file name already exists" });
-        }
-
         if (!req.file) {
             return res.status(400).json({ error: "file is required" });
         }
 
         if (req.file.mimetype !== "application/pdf") {
             return res.status(400).json({ error: "Only PDF files are allowed" });
+        }
+
+        const existingCertificate = await Certificate.findOne({ where: { file_name: req.file.originalname } });
+
+        if (existingCertificate) {
+            return res.status(409).json({ success: false, message: "Certificate with this file name already exists" });
         }
 
         const certificate = await Certificate.create({
@@ -71,9 +72,12 @@ export const getCertificateById = async (req, res, next) => {
 // Update certificate
 export const updateCertificate = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const parsedId = parseInt(req.params.id, 10);
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ message: "Invalid certificate ID" });
+        }
 
-        const certificate = await Certificate.findByPk(id);
+        const certificate = await Certificate.findByPk(parsedId);
         if (!certificate) {
             return res.status(404).json({ message: "Certificate not found" });
         }
@@ -83,17 +87,33 @@ export const updateCertificate = async (req, res, next) => {
                 return res.status(400).json({ error: "Only PDF files are allowed" });
             }
 
+            const duplicate = await Certificate.findOne({
+                where: {
+                    file_name: req.file.originalname,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+
+            if (duplicate) {
+                return res.status(409).json({
+                    message: "Another certificate with this file name already exists"
+                });
+            }
+
             certificate.file_name = req.file.originalname;
             certificate.pdf = req.file.buffer;
         }
 
         await certificate.save();
 
-        const updatedCertificate = await Certificate.findByPk(certificate.id, {
-            include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
+        const updatedCertificate = await Certificate.findByPk(parsedId, {
+            include: [{ model: User, as: "creator", attributes: ["id", "name"] }]
         });
 
-        return res.status(200).json({ message: "Certificate Updated", updatedCertificate });
+        return res.status(200).json({
+            message: "Certificate Updated",
+            updatedCertificate
+        });
     } catch (error) {
         next(error);
     }

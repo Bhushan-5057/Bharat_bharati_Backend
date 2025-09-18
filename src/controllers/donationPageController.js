@@ -122,6 +122,7 @@ export async function updateDonationPage(req, res, next) {
     try {
         const { id } = req.params;
         const { title, description, sub_title, account_holder_name, account_number, bank_name, ifsc_code } = req.body;
+        
         const donationPage = await DonationPage.findByPk(id);
         if (!donationPage) return res.status(404).json({ error: "Donation Page not found" });
 

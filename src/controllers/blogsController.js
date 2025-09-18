@@ -1,4 +1,5 @@
 import { User, Blog } from "../models/index.js";
+import { Op } from "sequelize";
 
 // Create Blog
 export const createBlog = async (req, res, next) => {
@@ -7,16 +8,39 @@ export const createBlog = async (req, res, next) => {
             return res.status(400).json({ success: false, message: "Image file is required" });
         }
 
+        const { title, slug, meta_title, meta_description, content, tags, category } = req.body;
+
+        const existingBlog = await Blog.findOne({
+            where: {
+                [Op.or]: [
+                    { title },
+                    { slug }
+                ]
+            }
+        });
+
+        if (existingBlog) {
+            return res.status(409).json({ success: false, message: "Blog with this title or slug already exists" });
+        }
+
+        const existingFile = await Blog.findOne({
+            where: { file_name: req.file.originalname }
+        });
+
+        if (existingFile) {
+            return res.status(409).json({ success: false, message: "Blog with this file already exists" });
+        }
+
         const blog = await Blog.create({
-            title: req.body.title,
-            slug: req.body.slug,
-            meta_title: req.body.meta_title,
-            meta_description: req.body.meta_description,
-            content: req.body.content,
+            title,
+            slug,
+            meta_title,
+            meta_description,
+            content,
             file_name: req.file.originalname,
             data: req.file.buffer,
-            tags: req.body.tags,
-            category: req.body.category,
+            tags,
+            category,
             created_by: req.user.id,
         });
 
@@ -107,18 +131,52 @@ export const getBlogBySlug = async (req, res, next) => {
 export const updateBlog = async (req, res, next) => {
     try {
         const blog = await Blog.findByPk(req.params.id);
-
         if (!blog) {
             return res.status(404).json({ success: false, message: "Blog not found" });
         }
 
-        const updateData = { ...req.body };
-        if (req.file) {
-            updateData.file_name = req.file.originalname;
-            updateData.data = req.file.buffer;
+        const updates = { ...req.body };
+        const uniqueFields = ["title", "slug"];
+
+        for (const field of uniqueFields) {
+            if (updates[field]) {
+                const existing = await Blog.findOne({
+                    where: {
+                        [field]: updates[field],
+                        id: { [Op.ne]: blog.id }
+                    }
+                });
+                if (existing) {
+                    return res
+                        .status(409)
+                        .json({ success: false, message: `Another blog with this ${field} already exists` });
+                }
+                blog[field] = updates[field];
+            }
         }
 
-        await blog.update(updateData);
+        if (req.file) {
+            const duplicateFile = await Blog.findOne({
+                where: {
+                    id: { [Op.ne]: blog.id },
+                    file_name: req.file.originalname
+                }
+            });
+
+            if (duplicateFile) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Another blog with this file already exists. Please upload a different file."
+                });
+            }
+
+            blog.file_name = req.file.originalname;
+            blog.data = req.file.buffer;
+        }
+
+        Object.assign(blog, updates);
+
+        await blog.save();
 
         res.json({ success: true, message: "Blog updated successfully", blog });
     } catch (error) {

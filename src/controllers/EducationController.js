@@ -1,4 +1,5 @@
 import { Education, EducationImages, User } from '../models/index.js'
+import { Op } from "sequelize";
 
 // Create Education
 export const createEducation = async (req, res, next) => {
@@ -18,12 +19,24 @@ export const createEducation = async (req, res, next) => {
             isMainImage = [isMainImage];
         }
 
-        const existingEducation = await Education.findOne({ where: { title } });
-        if (existingEducation) {
-            return res.status(400).json({
-                success: false,
-                message: `Education with title "${title}" already exists`
-            });
+        if (type === "education") {
+            const existingEducationPage = await Education.findOne({ where: { type: "education" } });
+            if (existingEducationPage) {
+                return res.status(400).json({
+                    success: false,
+                    message: "An education page already exists. You can only update it."
+                });
+            }
+        }
+
+        if (type === "school") {
+            const existingSchool = await Education.findOne({ where: { title } });
+            if (existingSchool) {
+                return res.status(400).json({
+                    success: false,
+                    message: `School with title "${title}" already exists`
+                });
+            }
         }
 
         const education = await Education.create({
@@ -136,14 +149,40 @@ export const getEducationById = async (req, res, next) => {
 // Update Education or School
 export const updateEducation = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const parsedId = parseInt(req.params.id, 10);
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ message: "Invalid education ID" });
+        }
         const { type, title, description, school_address } = req.body;
         const files = req.files;
 
-        const education = await Education.findByPk(id, {
+        const education = await Education.findByPk(parsedId, {
             include: [{ model: EducationImages, as: "images" }]
         });
-        if (!education) return res.status(404).json({ error: "Not found" });
+        if (!education) return res.status(404).json({ error: "Not found" }); 
+
+        if (type === "education") {
+            const existingEducationPage = await Education.findOne({
+                where: { type: "education", id: { [Op.ne]: parsedId } }
+            });
+            if (existingEducationPage) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Another education page already exists. You can only update it."
+                });
+            }
+        } 
+        if (type === "school" && title) {
+            const existingSchool = await Education.findOne({
+                where: { title, id: { [Op.ne]: parsedId } }
+            });
+            if (existingSchool) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Another school with title "${title}" already exists`
+                });
+            }
+        }
 
         await education.update({
             type: type ?? education.type,
@@ -164,7 +203,7 @@ export const updateEducation = async (req, res, next) => {
                     });
                 } else {
                     await EducationImages.create({
-                        education_id: id,
+                        education_id: parsedId,
                         file_name: file.originalname,
                         data: file.buffer
                     });
@@ -172,7 +211,7 @@ export const updateEducation = async (req, res, next) => {
             }
         }
 
-        const updated = await Education.findByPk(id, {
+        const updated = await Education.findByPk(parsedId, {
             include: [
                 { model: EducationImages, as: "images" },
                 { model: User, as: "creator", attributes: ["id", "name"] }

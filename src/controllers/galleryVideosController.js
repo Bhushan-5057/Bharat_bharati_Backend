@@ -1,4 +1,5 @@
-import { User,GalleryVideo } from "../models/index.js";
+import { User, GalleryVideo } from "../models/index.js";
+import { Op } from "sequelize";
 
 // Add a new video
 export const addVideo = async (req, res,next) => {
@@ -66,12 +67,45 @@ export const getVideoById = async (req, res,next) => {
 // Update video
 export const updateVideo = async (req, res,next) => {
     try {
-        const { id } = req.params;
+        const parsedId = parseInt(req.params.id, 10);
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ message: "Invalid video ID" });
+        }
         const { description, youtube_url } = req.body;
 
-        const video = await GalleryVideo.findByPk(id);
+        const video = await GalleryVideo.findByPk(parsedId);
         if (!video) {
             return res.status(404).json({ message: "Video not found" });
+        } 
+
+        if (youtube_url) {
+            const existingUrl = await GalleryVideo.findOne({
+                where: {
+                    youtube_url,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingUrl) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Another video with this YouTube URL already exists"
+                });
+            }
+        }
+
+        if (description) {
+            const existingDescription = await GalleryVideo.findOne({
+                where: {
+                    description,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingDescription) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Another video with this description already exists"
+                });
+            }
         }
 
         await video.update({

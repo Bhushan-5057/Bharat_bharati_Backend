@@ -1,3 +1,4 @@
+import { request } from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -27,7 +28,7 @@ const options = {
         security: [{ bearerAuth: [] }],
     },
     apis: [
-        'src/swagger_docs/*.js', 
+        'src/swagger_docs/*.js',
         'src/routes/*.js',
         'src/routes/**/*.js'
     ]
@@ -36,5 +37,12 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app) => {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+        swaggerOptions: {
+            requestInterceptor: (req) => {
+                req.timeout = 5 * 60 * 1000; 
+                return req;
+            }
+        }
+    }));
 };

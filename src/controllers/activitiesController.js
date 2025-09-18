@@ -1,4 +1,6 @@
+import { parse } from "dotenv";
 import { Activities, User } from "../models/index.js";
+import { Op } from "sequelize";
 
 // Create  Activities
 export const createActivities = async (req, res, next) => {
@@ -63,7 +65,7 @@ export const getAllActivities = async (req, res, next) => {
 };
 
 // Get activity by ID
-export const getActivityById = async (req, res) => {
+export const getActivityById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const activities = await Activities.findByPk(id, {
@@ -93,21 +95,46 @@ export const getActivityById = async (req, res) => {
 };
 
 // Update activities
-export const updateActivities = async (req, res) => {
+export const updateActivities = async (req, res, next) => {
     try {
-
-        const { id } = req.params;
+        const parsedId = parseInt(req.params.id, 10);
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ message: "Invalid certificate ID" });
+        }
         const { title, description } = req.body;
 
-        const activities = await Activities.findByPk(id);
+        const activities = await Activities.findByPk(parsedId);
         if (!activities) {
             return res.status(404).json({ message: "Activities not found" });
-        } 
+        }
 
-        if(title & description){
-            const existingActivities = await Activities.findOne({ where: { title, description } });
-            if (existingActivities) {
-                return res.status(409).json({ success: false, message: "Activities with this title & description already exists" });
+        if (title) {
+            const existingTitle = await Activities.findOne({
+                where: {
+                    title,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingTitle) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Activities with this title already exists",
+                });
+            }
+        }
+
+        if (description) {
+            const existingDescription = await Activities.findOne({
+                where: {
+                    description,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+            if (existingDescription) {
+                return res.status(409).json({
+                    success: false,
+                    message: "Activities with this description already exists",
+                });
             }
         }
 
@@ -150,7 +177,7 @@ export const updateActivities = async (req, res) => {
 };
 
 // Delete  activities
-export const deleteActivities = async (req, res) => {
+export const deleteActivities = async (req, res, next) => {
     try {
         const { id } = req.params;
 

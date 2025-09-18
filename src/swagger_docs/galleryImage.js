@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /gallery/add:
+ * /gallery_image/add:
  *   post:
  *     summary: Upload one or multiple images
  *     tags: [Gallery Images]
@@ -18,9 +18,9 @@
  *           schema:
  *             type: object
  *             required:
- *               - files
+ *               - file_name
  *             properties:
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -35,7 +35,7 @@
 
 /**
  * @swagger
- * /gallery/get-all:
+ * /gallery_image/get-all:
  *   get:
  *     summary: Get all gallery images
  *     tags: [Gallery Images]
@@ -46,7 +46,7 @@
 
 /**
  * @swagger
- * /gallery/get/{id}:
+ * /gallery_image/get/{id}:
  *   get:
  *     summary: Get a gallery image by ID
  *     tags: [Gallery Images]
@@ -65,7 +65,7 @@
 
 /**
  * @swagger
- * /gallery/update/{id}:
+ * /gallery_image/update/{id}:
  *   put:
  *     summary: Update a gallery image
  *     tags: [Gallery Images]
@@ -82,7 +82,7 @@
  *           schema:
  *             type: object
  *             properties:
- *               files:
+ *               file_name:
  *                 type: array
  *                 items:
  *                   type: string
@@ -97,7 +97,7 @@
 
 /**
  * @swagger
- * /gallery/delete/{id}:
+ * /gallery_image/delete/{id}:
  *   delete:
  *     summary: Delete a gallery image by ID
  *     tags: [Gallery Images]

@@ -1,4 +1,5 @@
 import { Cities, User, CityImages } from "../models/index.js";
+import { Op } from "sequelize";
 
 // Create  Cities
 export const createCity = async (req, res, next) => {
@@ -11,16 +12,30 @@ export const createCity = async (req, res, next) => {
             isMainImage = [isMainImage];
         }
 
-        const existingCity = await Cities.findOne({ where: { title } });
+        const existingCity = await Cities.findOne({
+            where: { title, description }
+        });
         if (existingCity) {
             return res.status(400).json({
                 success: false,
-                message: `City with title "${title}" already exists`
+                message: `City with same title & description already exists`
             });
         }
 
         if (!files || files.length === 0) {
             return res.status(400).json({ success: false, message: "Image File is required" });
+        } 
+
+        for (const file of files) {
+            const duplicateFile = await CityImages.findOne({
+                where: { file_name: file.originalname }
+            });
+            if (duplicateFile) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Image with file name "${file.originalname}" already exists`
+                });
+            }
         }
 
         const city = await Cities.create({
@@ -136,11 +151,14 @@ export const getCityById = async (req, res,next) => {
 
 export const updateCity = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const parsedId = parseInt(req.params.id, 10);
+        if (isNaN(parsedId)) {
+            return res.status(400).json({ message: "Invalid cities ID" });
+        }
         const { title, description } = req.body;
         const files = req.files; 
 
-        const city = await Cities.findByPk(id, {
+        const city = await Cities.findByPk(parsedId, {
             include: [{ model: CityImages, as: "images" }]
         });
 
@@ -148,19 +166,47 @@ export const updateCity = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "City not found" });
         }
 
+        if (title || description) {
+            const duplicateCity = await Cities.findOne({
+                where: {
+                    title,
+                    description,
+                    id: { [Op.ne]: parsedId }
+                }
+            });
+
+            if (duplicateCity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Another city with the same title and description already exists`
+                });
+            }
+        }
+
         await city.update({ title, description });
 
         if (files && files.length > 0) {
             for (const file of files) {
+                const duplicateFile = await CityImages.findOne({
+                    where: {
+                        file_name: file.originalname,
+                        cities_id: { [Op.ne]: parsedId }
+                    }
+                });
+                if (duplicateFile) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `Image with file name "${file.originalname}" already exists`
+                    });
+                }
+
                 const existingImage = city.images.find(img => img.file_name === file.originalname);
 
                 if (existingImage) {
-                    await existingImage.update({
-                        data: file.buffer
-                    });
+                    await existingImage.update({ data: file.buffer });
                 } else {
                     await CityImages.create({
-                        cities_id: id,
+                        cities_id: parsedId,
                         file_name: file.originalname,
                         data: file.buffer
                     });
@@ -168,7 +214,7 @@ export const updateCity = async (req, res, next) => {
             }
         }
 
-        const updated = await Cities.findByPk(id, {
+        const updated = await Cities.findByPk(parsedId, {
             include: [
                 { model: CityImages, as: "images" },
                 { model: User, as: "creator", attributes: ["id", "name"] }
