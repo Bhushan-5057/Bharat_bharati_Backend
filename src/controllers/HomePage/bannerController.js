@@ -89,7 +89,7 @@ export const updateBanner = async (req, res, next) => {
         const banner = await Banner.findByPk(id);
         if (!banner) return res.status(404).json({ message: "Banner not found" });
 
-        if (req.body.file_name) {
+        if (req.body && req.body.file_name) {
             const existingBanner = await Banner.findOne({
                 where: {
                     file_name: req.body.file_name,

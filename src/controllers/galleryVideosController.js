@@ -114,7 +114,7 @@ export const updateVideo = async (req, res,next) => {
             created_by:req.user.id,
         }); 
 
-        const updatedVideo = await GalleryVideo.findByPk(id, {
+        const updatedVideo = await GalleryVideo.findByPk(parsedId, {
             include: [{ model: User, as: "creator", attributes: ["id", "name"] }],
             attributes: ["id", "description", "youtube_url", "created_by", "createdAt", "updatedAt"],
         });
