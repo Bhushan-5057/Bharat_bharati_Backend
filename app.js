@@ -18,10 +18,26 @@ app.use(express.json({ limit: '10mb' }));
 
 // Security middleware
 app.use(helmet())
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3002',
+];
+
 app.use(cors({
-    origin: (origin, callback) => callback(null, origin),
-    credentials: true
-}))
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+app.options(/.*/, cors());
 
 // Swagger API docs
 setupSwagger(app)

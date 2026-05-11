@@ -31,7 +31,7 @@ export const login = async (req, res, next) => {
         email: user.email
       },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.Token_Expiration }
+      { expiresIn: process.env.TOKEN_EXPIRATION || '7d' }
     ) 
 
     const plainUser = user.get({ plain: true });
