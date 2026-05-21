@@ -1,4 +1,4 @@
-import { body, check } from "express-validator"; 
+import { body, check } from "express-validator";
 
 const allowedMimes = [
     "image/jpeg",
@@ -8,6 +8,8 @@ const allowedMimes = [
     "image/webp",
 ];
 
+const upiRegex = /^[a-zA-Z0-9.\-_]{2,}@[a-zA-Z]{2,}$/;
+
 export const createDonationPageValidation = [
     body("title")
         .notEmpty()
@@ -15,14 +17,14 @@ export const createDonationPageValidation = [
         .isString()
         .withMessage("Title must be a string")
         .trim(),
-    
+
     body("description")
         .notEmpty()
         .withMessage("Description is required")
         .isString()
         .withMessage("Description must be a string")
-        .trim(), 
-    
+        .trim(),
+
     check("file_name")
         .custom((value, { req }) => {
             if (!req.file) {
@@ -34,38 +36,46 @@ export const createDonationPageValidation = [
             }
             return true;
         }),
-    
+
     body("sub_title").
         notEmpty()
         .withMessage("Sub title is required"),
-    
+
     body("account_holder_name")
         .notEmpty()
         .withMessage("Account holder name is required")
         .isString()
         .withMessage("Account holder name must be a string")
         .trim(),
-    
+
     body("account_number")
         .isNumeric()
         .withMessage("Account number must be numeric")
         .notEmpty()
         .withMessage("Account number is required"),
-    
+
     body("bank_name")
         .notEmpty()
         .withMessage("Bank name is required")
         .isString()
         .withMessage("Bank name must be a string")
         .trim(),
-    
+
     body("ifsc_code")
         .notEmpty()
         .withMessage("IFSC code is required")
         .isString()
         .withMessage("IFSC code must be a string")
         .trim(),
-]; 
+
+    body("upi_id")
+        .notEmpty()
+        .withMessage("UPI ID is required")
+        .matches(upiRegex)
+        .withMessage("Invalid UPI ID format")
+        .trim()
+        .toLowerCase(),
+];
 
 export const updateDonationPageValidation = [
     body("title")
@@ -75,15 +85,15 @@ export const updateDonationPageValidation = [
         .isString()
         .withMessage("Title must be a string")
         .trim(),
-    
+
     body("description")
         .optional()
         .notEmpty()
         .withMessage("Description cannot be empty")
         .isString()
         .withMessage("Description must be a string")
-        .trim(), 
-    
+        .trim(),
+
     check("file_name")
         .custom((value, { req }) => {
             if (req.file) {
@@ -93,7 +103,7 @@ export const updateDonationPageValidation = [
             }
             return true;
         }),
-    
+
     body("sub_title")
         .optional()
         .notEmpty()
@@ -101,7 +111,7 @@ export const updateDonationPageValidation = [
         .isString()
         .withMessage("Sub title must be a string")
         .trim(),
-    
+
     body("account_holder_name")
         .optional()
         .notEmpty()
@@ -109,14 +119,14 @@ export const updateDonationPageValidation = [
         .isString()
         .withMessage("Account holder name must be a string")
         .trim(),
-    
+
     body("account_number")
         .optional()
         .isNumeric()
         .withMessage("Account number must be numeric")
         .notEmpty()
         .withMessage("Account number cannot be empty"),
-    
+
     body("bank_name")
         .optional()
         .notEmpty()
@@ -124,7 +134,7 @@ export const updateDonationPageValidation = [
         .isString()
         .withMessage("Bank name must be a string")
         .trim(),
-    
+
     body("ifsc_code")
         .optional()
         .notEmpty()
@@ -132,4 +142,13 @@ export const updateDonationPageValidation = [
         .isString()
         .withMessage("IFSC code must be a string")
         .trim(),
+
+    body("upi_id")
+        .optional()
+        .notEmpty()
+        .withMessage("UPI ID cannot be empty")
+        .matches(upiRegex)
+        .withMessage("Invalid UPI ID format")
+        .trim()
+        .toLowerCase(),
 ];

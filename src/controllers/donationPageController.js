@@ -13,15 +13,13 @@ export async function createDonationPage(req, res, next) {
         } 
 
         const donationPage = await DonationPage.create({
-            title: req.body.title,
-            description: req.body.description,
             file_name: req.file.originalname,
             data: req.file.buffer,
-            sub_title: req.body.sub_title,
             account_holder_name: req.body.account_holder_name,
             account_number: req.body.account_number,
             bank_name: req.body.bank_name,
             ifsc_code: req.body.ifsc_code,
+            upi_id: req.body.upi_id,
             created_by: req.user?.id
         });
 
@@ -36,10 +34,8 @@ export async function createDonationPage(req, res, next) {
             message: "Donation Page created successfully",
             donationPageWithRelation: {
                 id: donationPageWithRelation.id,
-                title: donationPageWithRelation.title,
-                description: donationPageWithRelation.description,
                 file_name: donationPageWithRelation.file_name,
-                sub_title: donationPageWithRelation.sub_title,
+                upi_id: donationPageWithRelation.upi_id,
                 account_holder_name: donationPageWithRelation.account_holder_name,
                 account_number: donationPageWithRelation.account_number,
                 bank_name: donationPageWithRelation.bank_name,
@@ -70,9 +66,7 @@ export async function getDonationPage(req, res, next) {
 
         res.json({
             id: donationPage.id,
-            title: donationPage.title,
-            description: donationPage.description,
-            sub_title: donationPage.sub_title,
+            upi_id: donationPage.upi_id,
             account_holder_name: donationPage.account_holder_name,
             account_number: donationPage.account_number,
             bank_name: donationPage.bank_name,
@@ -98,13 +92,11 @@ export async function getAllDonationPages(req, res, next) {
         });
         res.json(donationPages.map(page => ({
             id: page.id,
-            title: page.title,
-            description: page.description,
-            sub_title: page.sub_title,
             account_holder_name: page.account_holder_name,
             account_number: page.account_number,
             bank_name: page.bank_name,
             ifsc_code: page.ifsc_code,
+            upi_id: page.upi_id,
             created_by: page.created_by,
             creator: page.creator,
             createdAt: page.createdAt,
@@ -121,7 +113,7 @@ export async function getAllDonationPages(req, res, next) {
 export async function updateDonationPage(req, res, next) {
     try {
         const { id } = req.params;
-        const { title, description, sub_title, account_holder_name, account_number, bank_name, ifsc_code } = req.body;
+        const { account_holder_name, account_number, bank_name, ifsc_code, upi_id } = req.body;
         
         const donationPage = await DonationPage.findByPk(id);
         if (!donationPage) return res.status(404).json({ error: "Donation Page not found" });
@@ -131,14 +123,11 @@ export async function updateDonationPage(req, res, next) {
             donationPage.data = req.file.buffer;
         }
 
-        if (title) donationPage.title = title;
-        if (description) donationPage.description = description;
-        if (sub_title) donationPage.sub_title = sub_title;
         if (account_holder_name) donationPage.account_holder_name = account_holder_name;
         if (account_number) donationPage.account_number = account_number;
         if (bank_name) donationPage.bank_name = bank_name;
         if (ifsc_code) donationPage.ifsc_code = ifsc_code;
-
+        if (upi_id) donationPage.upi_id = upi_id;
         await donationPage.save();
 
         const updated = await DonationPage.findByPk(donationPage.id, {
@@ -149,9 +138,7 @@ export async function updateDonationPage(req, res, next) {
 
         res.json({
             id: updated.id,
-            title: updated.title,
-            description: updated.description,
-            sub_title: updated.sub_title,
+            upi_id: updated.upi_id,
             account_holder_name: updated.account_holder_name,
             account_number: updated.account_number,
             bank_name: updated.bank_name,
